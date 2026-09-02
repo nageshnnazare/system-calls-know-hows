@@ -51,11 +51,11 @@ socket addresses, or `SCM_RIGHTS` for cross-process sharing — Part 6.4).
 ```
    LEVEL 1 — per-process FD TABLE
    ┌────┬──────────────────────────────┐
-   │ 0  │ ──▶ stdin  open file desc   │
-   │ 1  │ ──▶ stdout open file desc   │
-   │ 2  │ ──▶ stderr open file desc   │
-   │ 3  │ ──▶ myfile open file desc   │
-   │ 4  │ ──▶ (empty)                 │
+   │ 0  │ ──▶ stdin  open file desc    │
+   │ 1  │ ──▶ stdout open file desc    │
+   │ 2  │ ──▶ stderr open file desc    │
+   │ 3  │ ──▶ myfile open file desc    │
+   │ 4  │ ──▶ (empty)                  │
    └────┴──────────────────────────────┘
 
    LEVEL 2 — OPEN FILE DESCRIPTION (system-wide, ref-counted)
