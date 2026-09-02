@@ -20,13 +20,13 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
-      - name: Fetch latest htmler script
+      - name: Download htmler script
         run: |
           wget -q -O htmler.sh https://raw.githubusercontent.com/nageshnnazare/htmler/refs/heads/main/htmler.sh
-          chmod +x htmler.sh -x scripts
+          chmod +x htmler.sh
 
       - name: Generate index.html
-        run: ./htmler.sh -o index.html
+        run: ./htmler.sh -o index.html -x scripts
 
       - name: Commit index.html if changed
         run: |
