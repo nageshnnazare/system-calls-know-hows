@@ -3065,16 +3065,16 @@ kernel decides what happens next. You never get to run arbitrary code as root.<\
 <\/div><\/details><details class="sec-fold" open><summary class="sec-summary"><h2 id="012-system-call-vs-library-call">0.1.2 System call vs library call<\/h2><\/summary><div class="sec-body">
 <p>This distinction trips up almost everyone at first:<\/p>
 <pre><code class="pygcode">   ┌────────────────────────────────────────────────────────────┐
-   │  LIBRARY CALL   e.g. printf(), fopen(), malloc(), strlen()  │
-   │  • ordinary function in libc, runs entirely in user space   │
-   │  • portable, may buffer, may call zero or many syscalls     │
+   │  LIBRARY CALL   e.g. printf(), fopen(), malloc(), strlen() │
+   │  • ordinary function in libc, runs entirely in user space  │
+   │  • portable, may buffer, may call zero or many syscalls    │
    └───────────────────────────┬────────────────────────────────┘
                                │  (sometimes)
                                ▼
    ┌────────────────────────────────────────────────────────────┐
-   │  SYSTEM CALL    e.g. write(), open(), mmap(), fork()        │
-   │  • request to the kernel; crosses the ring 3 → ring 0 wall  │
-   │  • the real work; every I/O byte and page ultimately here   │
+   │  SYSTEM CALL    e.g. write(), open(), mmap(), fork()       │
+   │  • request to the kernel; crosses the ring 3 → ring 0 wall │
+   │  • the real work; every I/O byte and page ultimately here  │
    └────────────────────────────────────────────────────────────┘
 <\/code><\/pre>
 <ul>
@@ -3127,13 +3127,13 @@ builds toward.<\/p>
 <p>There are a few hundred Linux syscalls (≈ 350+ on x86-64), but they cluster into
 a handful of families — which are exactly the parts of this guide:<\/p>
 <pre><code class="pygcode">   ┌──────────────────┬───────────────────────────────────────────────┐
-   │ Process control  │ fork, clone, execve, exit, wait4, kill         │
-   │ File I/O         │ open, close, read, write, lseek, stat, dup     │
-   │ Memory           │ brk, mmap, munmap, mprotect, madvise           │
-   │ IPC              │ pipe, signalfd, shmget, msgsnd, semop          │
-   │ Networking       │ socket, bind, listen, accept, connect, sendto  │
-   │ Time &amp; signals   │ nanosleep, clock_gettime, sigaction, timerfd   │
-   │ System / kernel  │ ioctl, prctl, sysinfo, perf_event_open, bpf    │
+   │ Process control  │ fork, clone, execve, exit, wait4, kill        │
+   │ File I/O         │ open, close, read, write, lseek, stat, dup    │
+   │ Memory           │ brk, mmap, munmap, mprotect, madvise          │
+   │ IPC              │ pipe, signalfd, shmget, msgsnd, semop         │
+   │ Networking       │ socket, bind, listen, accept, connect, sendto │
+   │ Time &amp; signals   │ nanosleep, clock_gettime, sigaction, timerfd  │
+   │ System / kernel  │ ioctl, prctl, sysinfo, perf_event_open, bpf   │
    └──────────────────┴───────────────────────────────────────────────┘
 <\/code><\/pre>
 <p>Learn the <em>shape<\/em> of each family and you can predict how an unfamiliar syscall
@@ -3224,16 +3224,16 @@ This distinction trips up almost everyone at first:
 
 \`\`\`
    ┌────────────────────────────────────────────────────────────┐
-   │  LIBRARY CALL   e.g. printf(), fopen(), malloc(), strlen()  │
-   │  • ordinary function in libc, runs entirely in user space   │
-   │  • portable, may buffer, may call zero or many syscalls     │
+   │  LIBRARY CALL   e.g. printf(), fopen(), malloc(), strlen() │
+   │  • ordinary function in libc, runs entirely in user space  │
+   │  • portable, may buffer, may call zero or many syscalls    │
    └───────────────────────────┬────────────────────────────────┘
                                │  (sometimes)
                                ▼
    ┌────────────────────────────────────────────────────────────┐
-   │  SYSTEM CALL    e.g. write(), open(), mmap(), fork()        │
-   │  • request to the kernel; crosses the ring 3 → ring 0 wall  │
-   │  • the real work; every I/O byte and page ultimately here   │
+   │  SYSTEM CALL    e.g. write(), open(), mmap(), fork()       │
+   │  • request to the kernel; crosses the ring 3 → ring 0 wall │
+   │  • the real work; every I/O byte and page ultimately here  │
    └────────────────────────────────────────────────────────────┘
 \`\`\`
 
@@ -3295,13 +3295,13 @@ a handful of families — which are exactly the parts of this guide:
 
 \`\`\`
    ┌──────────────────┬───────────────────────────────────────────────┐
-   │ Process control  │ fork, clone, execve, exit, wait4, kill         │
-   │ File I/O         │ open, close, read, write, lseek, stat, dup     │
-   │ Memory           │ brk, mmap, munmap, mprotect, madvise           │
-   │ IPC              │ pipe, signalfd, shmget, msgsnd, semop          │
-   │ Networking       │ socket, bind, listen, accept, connect, sendto  │
-   │ Time & signals   │ nanosleep, clock_gettime, sigaction, timerfd   │
-   │ System / kernel  │ ioctl, prctl, sysinfo, perf_event_open, bpf    │
+   │ Process control  │ fork, clone, execve, exit, wait4, kill        │
+   │ File I/O         │ open, close, read, write, lseek, stat, dup    │
+   │ Memory           │ brk, mmap, munmap, mprotect, madvise          │
+   │ IPC              │ pipe, signalfd, shmget, msgsnd, semop         │
+   │ Networking       │ socket, bind, listen, accept, connect, sendto │
+   │ Time & signals   │ nanosleep, clock_gettime, sigaction, timerfd  │
+   │ System / kernel  │ ioctl, prctl, sysinfo, perf_event_open, bpf   │
    └──────────────────┴───────────────────────────────────────────────┘
 \`\`\`
 
