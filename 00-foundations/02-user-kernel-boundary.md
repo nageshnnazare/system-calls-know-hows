@@ -53,16 +53,16 @@ Three mechanisms cooperate:
 
 ```
    ┌─────────────────────────────────────────────────────────────────┐
-   │  1. PRIVILEGE LEVEL (CPL in %cs)                                 │
-   │     privileged instructions fault in ring 3                      │
+   │  1. PRIVILEGE LEVEL (CPL in %cs)                                │
+   │     privileged instructions fault in ring 3                     │
    ├─────────────────────────────────────────────────────────────────┤
-   │  2. PAGE TABLES (PTE flags: U/S bit, NX, read/write)             │
-   │     user pages marked User; kernel pages marked Supervisor-only  │
-   │     user code cannot read/write/execute kernel mappings          │
+   │  2. PAGE TABLES (PTE flags: U/S bit, NX, read/write)            │
+   │     user pages marked User; kernel pages marked Supervisor-only │
+   │     user code cannot read/write/execute kernel mappings         │
    ├─────────────────────────────────────────────────────────────────┤
-   │  3. SYSCALL ENTRY POINT (MSR_LSTAR on x86-64)                    │
-   │     SYSCALL instruction jumps ONLY to the address the kernel     │
-   │     programmed — not to arbitrary kernel code                    │
+   │  3. SYSCALL ENTRY POINT (MSR_LSTAR on x86-64)                   │
+   │     SYSCALL instruction jumps ONLY to the address the kernel    │
+   │     programmed — not to arbitrary kernel code                   │
    └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -85,18 +85,18 @@ On x86-64 Linux, each process has its own page tables, but the layout is standar
 ```
    high addresses
    ┌──────────────────────────────────────────┐ 0xFFFF_FFFF_FFFF_FFFF
-   │  KERNEL SPACE (supervisor-only)           │
-   │  • not accessible from ring 3             │
-   │  • shared across all processes            │
-   │  • direct map of physical RAM (lowmem)    │
+   │  KERNEL SPACE (supervisor-only)          │
+   │  • not accessible from ring 3            │
+   │  • shared across all processes           │
+   │  • direct map of physical RAM (lowmem)   │
    ├──────────────────────────────────────────┤ ~0xFFFF_8000_0000_0000
-   │  canonical hole (non-canonical addresses) │
+   │ canonical hole (non-canonical addresses) │
    ├──────────────────────────────────────────┤ 0x0000_7FFF_FFFF_FFFF
-   │  USER SPACE (ring 3)                      │
-   │  • stack (high)                           │
-   │  • mmap regions                           │
-   │  • heap (brk)                             │
-   │  • .bss / .data / .text (low)             │
+   │  USER SPACE (ring 3)                     │
+   │  • stack (high)                          │
+   │  • mmap regions                          │
+   │  • heap (brk)                            │
+   │  • .bss / .data / .text (low)            │
    └──────────────────────────────────────────┘ 0x0000_0000_0000_0000
    low addresses
 ```
@@ -165,7 +165,7 @@ User threads share an address space but each has its own **kernel stack**. When
    ┌─────────────────────┐               ┌─────────────────────┐
    │ user stack (ring 3) │               │ user stack (unused) │
    │  [local vars]       │               ├─────────────────────┤
-   │  [return addresses] │               │ kernel stack (ring 0)│
+   │  [return addresses] │               │ kernel stack(ring 0)│
    └─────────────────────┘               │  [saved user regs]  │
    %rsp → user stack top                 │  [struct pt_regs]   │
                                          │  [kernel frames]    │
