@@ -48,7 +48,7 @@ about every syscall on your program's hot path.
         │  libc wrapper sets up registers (rax = syscall no., rdi/rsi/rdx = args)
         ▼
    ┌────────────────────────────────────────────────────────────┐
-   │   SYSCALL instruction  →  mode switch  →  ring 0 (kernel)    │  ← the trap
+   │   SYSCALL instruction  →  mode switch  →  ring 0 (kernel)  │  ← the trap
    └────────────────────────────────────────────────────────────┘
         │
         │  entry_SYSCALL_64 → sys_call_table[rax] → sys_read / sys_mmap / ...
