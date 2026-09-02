@@ -23,7 +23,7 @@ jobs:
       - name: Fetch latest htmler script
         run: |
           wget -q -O htmler.sh https://raw.githubusercontent.com/nageshnnazare/htmler/refs/heads/main/htmler.sh
-          chmod +x htmler.sh
+          chmod +x htmler.sh -x scripts
 
       - name: Generate index.html
         run: ./htmler.sh -o index.html

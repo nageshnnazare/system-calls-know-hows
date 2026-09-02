@@ -1,0 +1,19 @@
+# Compiled example binaries and debug bundles
+examples/*.dSYM/
+examples/file_operations
+examples/memory_demo
+examples/pipe_demo
+examples/process_manager
+examples/resource_limits
+examples/shm_demo
+examples/signal_demo
+examples/tcp_client
+examples/tcp_server
+examples/threads_demo
+
+# Locally fetched build script (CI downloads it fresh)
+htmler.sh
+
+# Python
+__pycache__/
+*.pyc
