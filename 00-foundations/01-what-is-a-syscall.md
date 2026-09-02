@@ -49,16 +49,16 @@ This distinction trips up almost everyone at first:
 
 ```
    ┌────────────────────────────────────────────────────────────┐
-   │  LIBRARY CALL   e.g. printf(), fopen(), malloc(), strlen()  │
-   │  • ordinary function in libc, runs entirely in user space   │
-   │  • portable, may buffer, may call zero or many syscalls     │
+   │  LIBRARY CALL   e.g. printf(), fopen(), malloc(), strlen() │
+   │  • ordinary function in libc, runs entirely in user space  │
+   │  • portable, may buffer, may call zero or many syscalls    │
    └───────────────────────────┬────────────────────────────────┘
                                │  (sometimes)
                                ▼
    ┌────────────────────────────────────────────────────────────┐
-   │  SYSTEM CALL    e.g. write(), open(), mmap(), fork()        │
-   │  • request to the kernel; crosses the ring 3 → ring 0 wall  │
-   │  • the real work; every I/O byte and page ultimately here   │
+   │  SYSTEM CALL    e.g. write(), open(), mmap(), fork()       │
+   │  • request to the kernel; crosses the ring 3 → ring 0 wall │
+   │  • the real work; every I/O byte and page ultimately here  │
    └────────────────────────────────────────────────────────────┘
 ```
 
@@ -120,13 +120,13 @@ a handful of families — which are exactly the parts of this guide:
 
 ```
    ┌──────────────────┬───────────────────────────────────────────────┐
-   │ Process control  │ fork, clone, execve, exit, wait4, kill         │
-   │ File I/O         │ open, close, read, write, lseek, stat, dup     │
-   │ Memory           │ brk, mmap, munmap, mprotect, madvise           │
-   │ IPC              │ pipe, signalfd, shmget, msgsnd, semop          │
-   │ Networking       │ socket, bind, listen, accept, connect, sendto  │
-   │ Time & signals   │ nanosleep, clock_gettime, sigaction, timerfd   │
-   │ System / kernel  │ ioctl, prctl, sysinfo, perf_event_open, bpf    │
+   │ Process control  │ fork, clone, execve, exit, wait4, kill        │
+   │ File I/O         │ open, close, read, write, lseek, stat, dup    │
+   │ Memory           │ brk, mmap, munmap, mprotect, madvise          │
+   │ IPC              │ pipe, signalfd, shmget, msgsnd, semop         │
+   │ Networking       │ socket, bind, listen, accept, connect, sendto │
+   │ Time & signals   │ nanosleep, clock_gettime, sigaction, timerfd  │
+   │ System / kernel  │ ioctl, prctl, sysinfo, perf_event_open, bpf   │
    └──────────────────┴───────────────────────────────────────────────┘
 ```
 
