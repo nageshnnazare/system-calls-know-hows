@@ -51,24 +51,24 @@ symlinks), for sandboxed code that holds a dir fd, and for `O_TMPFILE` creation.
 Flags are OR'd together. Think in **groups**:
 
 ```
-   ┌─────────────────────────────────────────────────────────────────┐
-   │  ACCESS MODE  (mutually exclusive — pick one)                    │
-   │    O_RDONLY   read only                                          │
-   │    O_WRONLY   write only                                         │
-   │    O_RDWR     read and write                                     │
-   ├─────────────────────────────────────────────────────────────────┤
-   │  CREATION / EXISTENCE                                            │
-   │    O_CREAT    create if missing (needs mode arg)                   │
-   │    O_EXCL     with O_CREAT: fail if file already exists (atomic) │
-   │    O_TRUNC    truncate regular file to length 0 on open-for-write│
-   ├─────────────────────────────────────────────────────────────────┤
-   │  STATUS / BEHAVIOUR                                              │
-   │    O_APPEND   every write goes to end-of-file (atomic per write) │
-   │    O_NONBLOCK non-blocking I/O (pipes, sockets, some devices)    │
-   │    O_CLOEXEC  set FD_CLOEXEC on the new fd (close on exec)       │
-   │    O_DIRECT   bypass page cache for this fd (alignment rules apply)│
-   │    O_SYNC     data+metadata synced to storage before write returns │
-   └─────────────────────────────────────────────────────────────────┘
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │  ACCESS MODE  (mutually exclusive — pick one)                       │
+   │    O_RDONLY   read only                                             │
+   │    O_WRONLY   write only                                            │
+   │    O_RDWR     read and write                                        │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │  CREATION / EXISTENCE                                               │
+   │    O_CREAT    create if missing (needs mode arg)                    │
+   │    O_EXCL     with O_CREAT: fail if file already exists (atomic)    │
+   │    O_TRUNC    truncate regular file to length 0 on open-for-write.  │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │  STATUS / BEHAVIOUR                                                 │
+   │    O_APPEND   every write goes to end-of-file (atomic per write)    │
+   │    O_NONBLOCK non-blocking I/O (pipes, sockets, some devices)       │
+   │    O_CLOEXEC  set FD_CLOEXEC on the new fd (close on exec)          │
+   │    O_DIRECT   bypass page cache for this fd (alignment rules apply) │
+   │    O_SYNC     data+metadata synced to storage before write returns  │
+   └─────────────────────────────────────────────────────────────────────┘
 ```
 
 **Access mode** is stored in the open file description and queried later with
