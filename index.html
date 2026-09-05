@@ -2344,6 +2344,8 @@ body[data-scheme="highcontrast"][data-theme="light"] .tab-content pre code.pygco
     /* No hover on touch, so keep the copy button visible. */
     .code-copy-btn { opacity: 1; transform: none; }
     .nav-doc-title { max-width: 64vw; font-size: 13px; padding: 6px 14px; }
+    /* Prevent the back-to-top button from overlapping the page credit footer on mobile */
+    .to-top { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 54px); }
 }
 
 /* ---- Very small phones ---- */
@@ -4526,7 +4528,7 @@ You should see \`write(2, ...)\` twice (same \`SYSCALL\` mechanism underneath), 
 
 Next: [0.4 — errno & error handling](04-errno-and-error-handling.md)
 ` },
-  { name: `5. Foundations / Errno And Error Handling`, path: `00-foundations/04-errno-and-error-handling.md`, dir: `00-foundations`, words: 1550, mins: 8, body: `<h1 id="04--errno--error-handling">0.4 — errno &amp; Error Handling<\/h1>
+  { name: `5. Foundations / Errno And Error Handling`, path: `00-foundations/04-errno-and-error-handling.md`, dir: `00-foundations`, words: 1547, mins: 8, body: `<h1 id="04--errno--error-handling">0.4 — errno &amp; Error Handling<\/h1>
 <p>Almost every syscall in this guide signals failure the same way: return <code>-1<\/code> (or a
 type-specific sentinel) and set <strong><code>errno<\/code><\/strong> — a small integer explaining <em>why<\/em>. Part
 0.3 showed the kernel side (<code>rax = -errno<\/code>); this chapter covers the user-space
@@ -4543,10 +4545,12 @@ contract you must code against: thread-local storage, the fact that success neve
 <blockquote>
 <p><strong>The call ▸<\/strong><\/p>
 <pre><code class="pygcode language-c has-linenos" data-lang="c"><span class="cl" id="L15-1"><a class="lnr" href="#L15-1" tabindex="-1" aria-hidden="true"><\/a><span class="cp">#include<\/span><span class="w"> <\/span><span class="cpf">&lt;errno.h&gt;<\/span><\/span><span class="cl" id="L15-2"><a class="lnr" href="#L15-2" tabindex="-1" aria-hidden="true"><\/a><span class="k">extern<\/span><span class="w"> <\/span><span class="kt">int<\/span><span class="w"> <\/span><span class="n">errno<\/span><span class="p">;<\/span><span class="w">   <\/span><span class="cm">/* thread-local; do not declare yourself on modern glibc */<\/span><\/span><\/code><\/pre>
-<p>After any syscall wrapper returns <strong>indicating failure<\/strong>:
-1. Check the return value (<code>-1<\/code>, <code>MAP_FAILED<\/code>, etc.).
-2. <strong>Immediately<\/strong> read <code>errno<\/code> before calling anything else.
-3. Handle or propagate.<\/p>
+<p>After any syscall wrapper returns <strong>indicating failure<\/strong>:<\/p>
+<ol>
+<li>Check the return value (<code>-1<\/code>, <code>MAP_FAILED<\/code>, etc.).<\/li>
+<li><strong>Immediately<\/strong> read <code>errno<\/code> before calling anything else.<\/li>
+<li>Handle or propagate.<\/li>
+<\/ol>
 <\/blockquote>
 <p>Typical pattern:<\/p>
 <pre><code class="pygcode language-c has-linenos" data-lang="c"><span class="cl" id="L16-1"><a class="lnr" href="#L16-1" tabindex="-1" aria-hidden="true"><\/a><span class="kt">int<\/span><span class="w"> <\/span><span class="n">fd<\/span><span class="w"> <\/span><span class="o">=<\/span><span class="w"> <\/span><span class="n">open<\/span><span class="p">(<\/span><span class="n">path<\/span><span class="p">,<\/span><span class="w"> <\/span><span class="n">O_RDONLY<\/span><span class="p">);<\/span><\/span><span class="cl" id="L16-2"><a class="lnr" href="#L16-2" tabindex="-1" aria-hidden="true"><\/a><span class="k">if<\/span><span class="w"> <\/span><span class="p">(<\/span><span class="n">fd<\/span><span class="w"> <\/span><span class="o">==<\/span><span class="w"> <\/span><span class="mi">-1<\/span><span class="p">)<\/span><span class="w"> <\/span><span class="p">{<\/span><\/span><span class="cl" id="L16-3"><a class="lnr" href="#L16-3" tabindex="-1" aria-hidden="true"><\/a><span class="w">    <\/span><span class="k">if<\/span><span class="w"> <\/span><span class="p">(<\/span><span class="n">errno<\/span><span class="w"> <\/span><span class="o">==<\/span><span class="w"> <\/span><span class="n">ENOENT<\/span><span class="p">)<\/span><span class="w"> <\/span><span class="p">{<\/span><\/span><span class="cl" id="L16-4"><a class="lnr" href="#L16-4" tabindex="-1" aria-hidden="true"><\/a><span class="w">        <\/span><span class="cm">/* file missing — expected? */<\/span><\/span><span class="cl" id="L16-5"><a class="lnr" href="#L16-5" tabindex="-1" aria-hidden="true"><\/a><span class="w">    <\/span><span class="p">}<\/span><span class="w"> <\/span><span class="k">else<\/span><span class="w"> <\/span><span class="p">{<\/span><\/span><span class="cl" id="L16-6"><a class="lnr" href="#L16-6" tabindex="-1" aria-hidden="true"><\/a><span class="w">        <\/span><span class="n">perror<\/span><span class="p">(<\/span><span class="s">&quot;open&quot;<\/span><span class="p">);<\/span><\/span><span class="cl" id="L16-7"><a class="lnr" href="#L16-7" tabindex="-1" aria-hidden="true"><\/a><span class="w">    <\/span><span class="p">}<\/span><\/span><span class="cl" id="L16-8"><a class="lnr" href="#L16-8" tabindex="-1" aria-hidden="true"><\/a><span class="w">    <\/span><span class="k">return<\/span><span class="w"> <\/span><span class="mi">-1<\/span><span class="p">;<\/span><\/span><span class="cl" id="L16-9"><a class="lnr" href="#L16-9" tabindex="-1" aria-hidden="true"><\/a><span class="p">}<\/span><\/span><\/code><\/pre>
@@ -9048,7 +9052,7 @@ payload:<\/p>
 <\/blockquote>
 <pre><code class="pygcode">   writev(fd, iov, 2)
 
-   iov[0]: &quot;HTTP/1.1 200\\r\\n&quot;  ──┐
+   iov[0]: &quot;HTTP/1.1 200\\r\\n&quot;   ──┐
    iov[1]: body bytes           ──┼──▶ single syscall, possibly one TCP segment
                                   ┘
 <\/code><\/pre>
@@ -9323,7 +9327,7 @@ payload:
 \`\`\`
    writev(fd, iov, 2)
 
-   iov[0]: "HTTP/1.1 200\\r\\n"  ──┐
+   iov[0]: "HTTP/1.1 200\\r\\n"   ──┐
    iov[1]: body bytes           ──┼──▶ single syscall, possibly one TCP segment
                                   ┘
 \`\`\`
@@ -17336,7 +17340,7 @@ associated with that cond, and use the same lock ordering when multiple conds ex
 
 Next: [5.4 — Condition variables](04-condition-variables.md)
 ` },
-  { name: `33. Threads / Condition Variables`, path: `05-threads/04-condition-variables.md`, dir: `05-threads`, words: 1464, mins: 7, body: `<h1 id="54--condition-variables">5.4 — Condition Variables<\/h1>
+  { name: `33. Threads / Condition Variables`, path: `05-threads/04-condition-variables.md`, dir: `05-threads`, words: 1460, mins: 7, body: `<h1 id="54--condition-variables">5.4 — Condition Variables<\/h1>
 <p>A mutex protects shared <strong>data<\/strong>; a <strong>condition variable<\/strong> lets threads <strong>wait for a
 state change<\/strong> on that data without burning CPU. The canonical pattern is
 <strong>mutex + predicate<\/strong>: lock, check a condition in a loop, wait if false, mutate,
@@ -17367,11 +17371,13 @@ why the predicate loop is mandatory, not optional.<\/p>
 <p>Producer side:<\/p>
 <pre><code class="pygcode language-c has-linenos" data-lang="c"><span class="cl" id="L150-1"><a class="lnr" href="#L150-1" tabindex="-1" aria-hidden="true"><\/a><span class="n">pthread_mutex_lock<\/span><span class="p">(<\/span><span class="o">&amp;<\/span><span class="n">m<\/span><span class="p">);<\/span><\/span><span class="cl" id="L150-2"><a class="lnr" href="#L150-2" tabindex="-1" aria-hidden="true"><\/a><span class="cm">/* make predicate true */<\/span><\/span><span class="cl" id="L150-3"><a class="lnr" href="#L150-3" tabindex="-1" aria-hidden="true"><\/a><span class="n">pthread_cond_signal<\/span><span class="p">(<\/span><span class="o">&amp;<\/span><span class="n">cv<\/span><span class="p">);<\/span><span class="w">       <\/span><span class="cm">/* or broadcast */<\/span><\/span><span class="cl" id="L150-4"><a class="lnr" href="#L150-4" tabindex="-1" aria-hidden="true"><\/a><span class="n">pthread_mutex_unlock<\/span><span class="p">(<\/span><span class="o">&amp;<\/span><span class="n">m<\/span><span class="p">);<\/span><\/span><\/code><\/pre>
 <blockquote>
-<p><strong>Under the hood ▸<\/strong> <code>pthread_cond_wait<\/code> atomically:
-1. Adds caller to the cond&rsquo;s wait queue.
-2. <strong>Unlocks<\/strong> <code>mutex<\/code>.
-3. Blocks (futex sleep — Part 5.5).
-4. On wake, <strong>re-acquires<\/strong> <code>mutex<\/code> before returning.<\/p>
+<p><strong>Under the hood ▸<\/strong> <code>pthread_cond_wait<\/code> atomically:<\/p>
+<ol>
+<li>Adds caller to the cond&rsquo;s wait queue.<\/li>
+<li><strong>Unlocks<\/strong> <code>mutex<\/code>.<\/li>
+<li>Blocks (futex sleep — Part 5.5).<\/li>
+<li>On wake, <strong>re-acquires<\/strong> <code>mutex<\/code> before returning.<\/li>
+<\/ol>
 <\/blockquote>
 <p>You must re-check the predicate after wake because you re-acquire the lock in a
 racy world where other threads may have changed state.<\/p>
