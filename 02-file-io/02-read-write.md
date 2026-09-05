@@ -183,7 +183,7 @@ payload:
 ```
    writev(fd, iov, 2)
 
-   iov[0]: "HTTP/1.1 200\r\n"  ──┐
+   iov[0]: "HTTP/1.1 200\r\n"   ──┐
    iov[1]: body bytes           ──┼──▶ single syscall, possibly one TCP segment
                                   ┘
 ```
